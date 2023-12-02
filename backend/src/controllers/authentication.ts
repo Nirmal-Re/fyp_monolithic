@@ -1,20 +1,20 @@
 import express from "express";
 
 import { createHashedPassword } from "../helpers";
-import { addUser } from "../model/users";
+import { getUserByEmail, addUser } from "../model/users";
+import { get } from "http";
 
  export const register = async (req: express.Request, res:express.Response) => {
     try{
-        const {email, password, username} = req.body;
-        console.log(email, password, username  );
+        const {email, password, username, firstName, lastName} = req.body;
         if (!email || !password || !username) {
             return res.status(400).send({error: "Missing fields"});
         }
-        //todo check email is unique
+        getUserByEmail(email); //The db function is asynchous so it will return a promise, need to make it wait and return value to check
         //todo check username is unique
         const hashedPassword = await createHashedPassword(password);
         //todo insert into db
-        addUser({email, password_salt: hashedPassword, username});
+        addUser({email, hashed_password: hashedPassword, username, first_name: firstName, last_name: lastName});
 
         res.status(200).json({username, email});
     } catch (e) {

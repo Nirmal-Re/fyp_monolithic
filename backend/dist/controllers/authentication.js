@@ -5,16 +5,15 @@ const helpers_1 = require("../helpers");
 const users_1 = require("../model/users");
 const register = async (req, res) => {
     try {
-        const { email, password, username } = req.body;
-        console.log(email, password, username);
+        const { email, password, username, firstName, lastName } = req.body;
         if (!email || !password || !username) {
             return res.status(400).send({ error: "Missing fields" });
         }
-        //todo check email is unique
+        (0, users_1.getUserByEmail)(email); //The db function is asynchous so it will return a promise, need to make it wait and return value to check
         //todo check username is unique
         const hashedPassword = await (0, helpers_1.createHashedPassword)(password);
         //todo insert into db
-        (0, users_1.addUser)({ email, password_salt: hashedPassword, username });
+        (0, users_1.addUser)({ email, hashed_password: hashedPassword, username, first_name: firstName, last_name: lastName });
         res.status(200).json({ username, email });
     }
     catch (e) {

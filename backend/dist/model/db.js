@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAllItems = exports.deleteItemsByCriteria = exports.deleteItemByID = exports.updateItemsByCriteria = exports.updateItem = exports.getItemsByCriteria = exports.getItemByID = exports.getAllItems = exports.addMultipleItems = exports.addItem = void 0;
+exports.deleteAllItems = exports.deleteItemsByCriteria = exports.deleteItemByID = exports.updateItemsByCriteria = exports.updateItem = exports.getItemsByCriteria = exports.getItemByID = exports.getAllItems = exports.addMultipleItems = exports.addItem = exports.excuteCustomQuery = void 0;
 const mysql2_1 = __importDefault(require("mysql2"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
@@ -18,15 +18,16 @@ conn.connect(function (err) {
     }
     console.log('connected as id ' + conn.threadId);
 });
-const excuteQuery = async (query) => {
+const excuteCustomQuery = (query) => {
     conn.query(query, (err, results, fields) => {
         if (err) {
             console.log(err);
         }
-        console.log(fields);
-        return results; // results contains rows returned by server
+        console.log(results);
+        // console.log(fields);
     });
 };
+exports.excuteCustomQuery = excuteCustomQuery;
 const addItem = (table, item) => {
     conn.query(`INSERT INTO ${table} SET ?`, [item], (err, results, fields) => {
         if (err) {
@@ -67,8 +68,9 @@ const getItemByID = (table, id) => {
     });
 };
 exports.getItemByID = getItemByID;
-const getItemsByCriteria = (table, criteria) => {
-    conn.query(`SELECT * FROM ${table} WHERE ?`, [criteria], (err, results, fields) => {
+const getItemsByCriteria = (table, fields, criteria) => {
+    const queryfields = fields.length === 0 ? "*" : fields.join(", ");
+    conn.query(`SELECT ${queryfields} FROM ${table} WHERE ?`, [criteria], (err, results, fields) => {
         if (err) {
             console.log(err);
         }

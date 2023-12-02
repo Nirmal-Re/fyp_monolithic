@@ -17,15 +17,16 @@ conn.connect(function(err) {
   console.log('connected as id ' + conn.threadId);
 });
 
-const excuteQuery = async (query:string) => {
+export const excuteCustomQuery = (query:string) => {
     conn.query(query, (err, results, fields) => {
         if (err) {
         console.log(err);
         }
-        console.log(fields);
-        return results; // results contains rows returned by server
+        console.log(results);
+        // console.log(fields);
     });
 }
+
 
 export const addItem = (table:string, item:any) => {
     conn.query(`INSERT INTO ${table} SET ?`, [item], (err, results, fields) => {
@@ -67,8 +68,9 @@ export const getItemByID = (table:string, id:string) => {
     });
 }
 
-export const getItemsByCriteria = (table:string, criteria:any) => {
-    conn.query(`SELECT * FROM ${table} WHERE ?`, [criteria], (err, results, fields) => {
+export const getItemsByCriteria = (table:string, fields:string[] ,criteria:any) => {
+    const queryfields = fields.length === 0 ? "*" : fields.join(", ")
+    conn.query(`SELECT ${queryfields} FROM ${table} WHERE ?`, [criteria], (err, results, fields) => {
         if (err) {
         console.log(err);
         }
