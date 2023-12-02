@@ -1,6 +1,7 @@
 import express from "express";
 
 import { createHashedPassword } from "../helpers";
+import { addUser } from "../model/users";
 
  export const register = async (req: express.Request, res:express.Response) => {
     try{
@@ -13,6 +14,7 @@ import { createHashedPassword } from "../helpers";
         //todo check username is unique
         const hashedPassword = await createHashedPassword(password);
         //todo insert into db
+        addUser({email, password_salt: hashedPassword, username});
 
         res.status(200).json({username, email});
     } catch (e) {

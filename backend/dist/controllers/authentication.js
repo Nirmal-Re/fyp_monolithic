@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = exports.register = void 0;
 const helpers_1 = require("../helpers");
+const users_1 = require("../model/users");
 const register = async (req, res) => {
     try {
         const { email, password, username } = req.body;
@@ -13,6 +14,7 @@ const register = async (req, res) => {
         //todo check username is unique
         const hashedPassword = await (0, helpers_1.createHashedPassword)(password);
         //todo insert into db
+        (0, users_1.addUser)({ email, password_salt: hashedPassword, username });
         res.status(200).json({ username, email });
     }
     catch (e) {
