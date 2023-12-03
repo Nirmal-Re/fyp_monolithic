@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 
 
-const createHashedPassword = async (password:string) => {
+export const createHashedPassword = async (password:string) => {
     try{
         const hashedPassword = await bcrypt.hash(password, 10);
         return hashedPassword;
@@ -10,4 +10,15 @@ const createHashedPassword = async (password:string) => {
     }
 }
 
-export {createHashedPassword};
+export const comparePassword = async (password:string, hashedPassword:string) => {
+    try{
+        const result = await bcrypt.compare(password, hashedPassword);
+        return result;
+    } catch {
+        return {error: "Error with comparing password"};
+    }
+}
+
+export const createSessionToken = async (user_id:string) => {}
+
+
