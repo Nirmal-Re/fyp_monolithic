@@ -1,8 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = exports.register = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const helpers_1 = require("../helpers");
 const users_1 = require("../model/users");
+const config_1 = require("../constants/config");
 //Registers a new user
 const register = async (req, res) => {
     try {
@@ -26,7 +31,7 @@ const register = async (req, res) => {
     }
     catch (e) {
         console.log("Error with registering user", e);
-        res.status(400).send({ err0r: "Error with registering user" });
+        res.status(400).send({ error: "Error with registering user" });
     }
 };
 exports.register = register;
@@ -40,18 +45,16 @@ const login = async (req, res) => {
         if (!await (0, users_1.checkUserExistsByEmail)(email)) {
             return res.status(400).send({ error: "User by this email doesn't exist" });
         }
-        const { user_id, first_name, last_name, hashed_password } = await (0, users_1.getUserDataByEmail)(email);
+        const { id, first_name, last_name, hashed_password } = await (0, users_1.getUserDataByEmail)(email);
         const isPasswordCorrect = await (0, helpers_1.comparePassword)(password, hashed_password);
         if (!isPasswordCorrect) {
             return res.status(403).send({ error: "Incorrect password" });
         }
-        console.log("Logged in successfully");
-        return res.status(200).send({ user_id, first_name, last_name });
-        // TODO: generate a session token
-        // Create a cookie with session token
-        // if correct generate a session token add it in cache database (This way server becomes stateless)
-        // so when the logged in user sends a request to the server I can check if the session token is valid and present in cache database
-        // return session token with in cookie in response
+        console.log(`${email} has logged in successfully`);
+        const { JWT_ACCESS_TOKEN_SECRET, JWT_REFRESH_TOKEN_SECRET } = config_1.secrets;
+        const accessToken = jsonwebtoken_1.default.sign({ email, uid: id }, JWT_ACCESS_TOKEN_SECRET);
+        res.cookie("access_token", accessToken, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 30 });
+        return res.status(200).send({ message: "Logged in successfully", user: { email, first_name, last_name } }); // This might have to change. I am not sure if I should send the user data back to the client
     }
     catch (e) {
         console.log(e);

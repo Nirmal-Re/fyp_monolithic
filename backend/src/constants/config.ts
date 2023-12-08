@@ -18,12 +18,32 @@ interface DB_Interface {
 //     password: ""
 // };
 
-const {SQL_DB_HOST, SQL_DB_USER, SQL_DB_PASSWORD, SQL_DB_NAME} = process.env;
+const {SQL_DB_HOST, SQL_DB_USER, SQL_DB_PASSWORD, SQL_DB_NAME, JWT_ACCESS_TOKEN_SECRET, JWT_REFRESH_TOKEN_SECRET} = process.env;
+if (!SQL_DB_HOST || !SQL_DB_USER || !SQL_DB_PASSWORD || !SQL_DB_NAME) {
+    throw new Error("SQL database connection values are not defined");
+}
+
 
 
 export const DB_mysql:DB_Interface = {
-    host: SQL_DB_HOST|| "localhost",
-    user:  SQL_DB_USER|| "root",
-    password: SQL_DB_PASSWORD|| "password",
-    database: SQL_DB_NAME || "cn_habit_tracker",
+    host: SQL_DB_HOST,
+    user:  SQL_DB_USER,
+    password: SQL_DB_PASSWORD,
+    database: SQL_DB_NAME,
+}
+
+
+interface JWT_Interface {
+    JWT_ACCESS_TOKEN_SECRET: string;
+    JWT_REFRESH_TOKEN_SECRET: string;
+
+}
+
+if (!JWT_ACCESS_TOKEN_SECRET || !JWT_REFRESH_TOKEN_SECRET) {
+    throw new Error("JWT secrets not defined");
+}
+
+export const secrets:JWT_Interface = {
+    JWT_ACCESS_TOKEN_SECRET,
+    JWT_REFRESH_TOKEN_SECRET
 }

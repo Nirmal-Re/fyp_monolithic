@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import router from "./router";
 
@@ -11,12 +12,14 @@ app.use(cors({
 }))
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
 })
 
 app.use("/auth", router());
+app.use("/user", router());
 
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000/");

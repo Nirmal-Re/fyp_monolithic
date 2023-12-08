@@ -1,13 +1,24 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isOwner = exports.isAuthenticated = void 0;
+exports.isAuthenticated = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const lodash_1 = require("lodash");
+const config_1 = require("../constants/config");
 const isAuthenticated = async (req, res, next) => {
     try {
-        // get session token from cookie
-        // get session token from redis
-        // if session token doesn't exist in redis return error status 403
-        // if session token exists in redis call next function
-        //go back to the video and check why the person had added identity to the req object
+        // get access_token from cookie
+        const { access_token } = req.cookies;
+        if (!access_token)
+            return res.status(403).send({ error: "Not authenticated" });
+        // verify access_token
+        const { JWT_ACCESS_TOKEN_SECRET } = config_1.secrets;
+        const { email, uid } = jsonwebtoken_1.default.verify(access_token, JWT_ACCESS_TOKEN_SECRET);
+        if (!email || !uid)
+            return res.status(403).send({ error: "Not authenticated" });
+        (0, lodash_1.merge)(req.body, { uid });
         next();
     }
     catch (e) {
@@ -16,12 +27,4 @@ const isAuthenticated = async (req, res, next) => {
     }
 };
 exports.isAuthenticated = isAuthenticated;
-//to check if the user trying to delete the user is the owner of the account
-const isOwner = async (req, res, next) => {
-    try {
-    }
-    catch (error) {
-    }
-};
-exports.isOwner = isOwner;
 //# sourceMappingURL=index.js.map

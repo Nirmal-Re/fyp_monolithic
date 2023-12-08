@@ -1,11 +1,12 @@
 import express from 'express';
-import { deleteUser, updateUser } from '../controllers/users';
-import { isAuthenticated, isOwner } from '../middlewares';
+import { deleteUser, updateUser, changePassword } from '../controllers/users';
+import { isAuthenticated } from '../middlewares';
 
 
 export default (router:express.Router) => {
-    router.post("/delete", isAuthenticated, isOwner, deleteUser)
-    router.post("/update", isAuthenticated, isOwner, updateUser)
+    router.delete("/delete", isAuthenticated, deleteUser)
+    router.post("/update", isAuthenticated, updateUser)
+    router.post("/change-password", isAuthenticated, changePassword)
 
     return router;
 }

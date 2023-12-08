@@ -1,7 +1,11 @@
 import express from "express";
+import jwt from "jsonwebtoken";
 
 import { createHashedPassword, comparePassword} from "../helpers";
 import { getUserDataByEmail, checkUserExistsByEmail, createUser } from "../model/users";
+import { secrets } from "../constants/config";
+import { access } from "fs";
+
 
 
 //Registers a new user
@@ -29,7 +33,7 @@ import { getUserDataByEmail, checkUserExistsByEmail, createUser } from "../model
 
     } catch (e) {
         console.log("Error with registering user", e);
-        res.status(400).send({err0r: "Error with registering user"});
+        res.status(400).send({error: "Error with registering user"});
     }
 
 }
@@ -46,21 +50,19 @@ export const login = async (req: express.Request, res:express.Response) => {
             return res.status(400).send({error: "User by this email doesn't exist"});
         }
 
-        const { user_id, first_name, last_name, hashed_password } = await getUserDataByEmail(email);
+        const { id, first_name, last_name, hashed_password } = await getUserDataByEmail(email);
         const isPasswordCorrect = await comparePassword(password, hashed_password);
 
         if (!isPasswordCorrect) {
             return res.status(403).send({error: "Incorrect password"});
         }
 
-        console.log("Logged in successfully")
-        return res.status(200).send({user_id, first_name, last_name});
+        console.log(`${email} has logged in successfully`);
+        const {JWT_ACCESS_TOKEN_SECRET, JWT_REFRESH_TOKEN_SECRET} = secrets;
+        const accessToken = jwt.sign({email, uid:id}, JWT_ACCESS_TOKEN_SECRET)
+        res.cookie("access_token", accessToken, {httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 30});
+        return res.status(200).send({message: "Logged in successfully", user: {email, first_name, last_name}});  // This might have to change. I am not sure if I should send the user data back to the client
 
-        // TODO: generate a session token
-        // Create a cookie with session token
-        // if correct generate a session token add it in cache database (This way server becomes stateless)
-        // so when the logged in user sends a request to the server I can check if the session token is valid and present in cache database
-        // return session token with in cookie in response
     } catch (e) {
         console.log(e);
         return res.sendStatus(400).send({error: "Error with logging in"});

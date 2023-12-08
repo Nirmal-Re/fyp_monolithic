@@ -1,10 +1,7 @@
 import mysql2, { RowDataPacket, ResultSetHeader, FieldPacket} from "mysql2/promise";
-import dotenv from "dotenv";
-import path from "path"
 
 import { DB_mysql } from "../constants/config";
 
-dotenv.config({path: path.join(__dirname, "../.env")});
 let conn:mysql2.Connection;
 
 
@@ -28,7 +25,7 @@ export const excuteCustomQuery = (query:string) => {
 
 export const addItem = async (table:string, item:any):Promise<boolean> => {
     const [result] = await conn.query(`INSERT INTO ${table} SET ?`, [item]) as [ResultSetHeader, FieldPacket[]];
-    const {insertId, affectedRows} = result;
+    const {affectedRows} = result;
     return affectedRows === 1 ? true : false;
 }
 
@@ -50,8 +47,9 @@ export const getItemsByCriteria = async (table:string, fields:string[] ,criteria
     return row[0];
 }
 
-export const updateItem = (table:string, id:string, item:any) => {
-    conn.query(`UPDATE ${table} SET ? WHERE id = ?`, [item, id])
+export const updateItem = async (table:string, id:string, item:any) => {
+    const [result] = await conn.query(`UPDATE ${table} SET ? WHERE id = ?`, [item, id]) as [ResultSetHeader, FieldPacket[]];
+    return result.affectedRows === 1 ? true : false;
 }
 
 export const updateItemsByCriteria = (table:string, criteria:any, item:any) => {
@@ -59,8 +57,10 @@ export const updateItemsByCriteria = (table:string, criteria:any, item:any) => {
 }
 
 
-export const deleteItemByID = (table:string, id:string) => {
-    conn.query(`DELETE FROM ${table} WHERE id = ?`, [id])
+export const deleteItemByID = async (table:string, id:string) => {
+    const [result] = await conn.query(`DELETE FROM ${table} WHERE id = ?`, [id]) as [ResultSetHeader, FieldPacket[]];
+    const {affectedRows} = result;
+    return affectedRows === 1 ? true : false;
 }
 
 export const deleteItemsByCriteria = (table:string, criteria:any) => {
