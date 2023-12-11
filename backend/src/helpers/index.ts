@@ -19,6 +19,11 @@ export const comparePassword = async (password:string, hashedPassword:string) =>
     }
 }
 
+
+export const startAndEndOfDay = () => {
+    return [new Date(new Date().setHours(0,0,0,0)), new Date(new Date().setHours(23,59,59,999))]; //[startofday, endofday]
+}
+
 export const createSessionToken = async (user_id:string) => {}
 
 

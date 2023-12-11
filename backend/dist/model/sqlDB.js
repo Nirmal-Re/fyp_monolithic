@@ -70,4 +70,4 @@ const deleteAllItems = (table) => {
     conn.query(`DELETE FROM ${table}`, []);
 };
 exports.deleteAllItems = deleteAllItems;
-//# sourceMappingURL=db.js.map
+//# sourceMappingURL=sqlDB.js.map

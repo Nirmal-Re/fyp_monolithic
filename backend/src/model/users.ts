@@ -1,4 +1,4 @@
-import {addItem, getItemsByCriteria, deleteItemByID, updateItem} from './db';
+import {addItem, getItemsByCriteria, deleteItemByID, updateItem} from './sqlDB';
 
 export const createUser = async (user:any) => {
    return addItem('t_user_login_data', user);

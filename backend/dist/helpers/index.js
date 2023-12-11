@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSessionToken = exports.comparePassword = exports.createHashedPassword = void 0;
+exports.createSessionToken = exports.startAndEndOfDay = exports.comparePassword = exports.createHashedPassword = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const createHashedPassword = async (password) => {
     try {
@@ -25,6 +25,10 @@ const comparePassword = async (password, hashedPassword) => {
     }
 };
 exports.comparePassword = comparePassword;
+const startAndEndOfDay = () => {
+    return [new Date(new Date().setHours(0, 0, 0, 0)), new Date(new Date().setHours(23, 59, 59, 999))]; //[startofday, endofday]
+};
+exports.startAndEndOfDay = startAndEndOfDay;
 const createSessionToken = async (user_id) => { };
 exports.createSessionToken = createSessionToken;
 //# sourceMappingURL=index.js.map

@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import { createHashedPassword, comparePassword} from "../helpers";
 import { getUserDataByEmail, checkUserExistsByEmail, createUser } from "../model/users";
 import { secrets } from "../constants/config";
-import { access } from "fs";
 
 
 
