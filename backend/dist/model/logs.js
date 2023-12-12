@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteLog = exports.updateHabits = exports.createHabits = exports.getHabits = exports.updateLog = exports.getTodaysLog = exports.addLog = void 0;
+exports.deleteLog = exports.getLogById = exports.updateHabits = exports.createHabits = exports.getHabits = exports.updateLog = exports.getTodaysLog = exports.addLog = void 0;
+const mongodb_1 = require("mongodb");
+const helpers_1 = require("../helpers");
 const mongoDB_1 = require("./mongoDB");
 const addLog = async (log) => {
     return await (0, mongoDB_1.m_insertOne)("coll_logs", log);
@@ -25,8 +27,8 @@ const getTodaysLog = async (uid, startOfDay, endOfDay) => {
     return secondResults;
 };
 exports.getTodaysLog = getTodaysLog;
-const updateLog = async (id, log) => {
-    return await (0, mongoDB_1.m_updateOne)("coll_logs", { id }, { $set: log });
+const updateLog = async (_id, log) => {
+    return await (0, mongoDB_1.m_updateOne)("coll_logs", { _id: new mongodb_1.ObjectId(_id) }, { $set: log });
 };
 exports.updateLog = updateLog;
 const getHabits = async (uid) => {
@@ -44,9 +46,23 @@ const createHabits = async (uid) => {
 exports.createHabits = createHabits;
 const updateHabits = async (data) => {
     const { uid, newHabits } = data;
-    return await (0, mongoDB_1.m_updateOne)("coll_user_habits", { uid }, { $addToSet: { habits: { $each: newHabits } } });
+    await (0, mongoDB_1.m_updateOne)("coll_user_habits", { uid }, { $addToSet: { habits: { $each: newHabits } } });
+    const [startOfDay, endOfDay] = (0, helpers_1.startAndEndOfDay)();
+    const todaysLog = await (0, exports.getTodaysLog)(uid, startOfDay, endOfDay);
+    const { _id } = todaysLog;
+    for (let i = 0; i < newHabits.length; i++) {
+        if (!todaysLog?.[newHabits[i]]) {
+            todaysLog[newHabits[i]] = false;
+        }
+    }
+    delete todaysLog._id;
+    return await (0, exports.updateLog)(String(_id), todaysLog);
 };
 exports.updateHabits = updateHabits;
+const getLogById = async (id) => {
+    return await (0, mongoDB_1.m_getOne)("coll_logs", { _id: new mongodb_1.ObjectId(id) });
+};
+exports.getLogById = getLogById;
 const deleteLog = async (id) => {
     return await (0, mongoDB_1.m_deleteOne)("coll_logs", { id });
 };

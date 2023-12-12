@@ -6,9 +6,17 @@ const logs_1 = require("../model/logs");
 //This function isn't finished yet
 const addDailyLog = async (req, res) => {
     try {
-        // const {} = req.body;
-        const value = await (0, logs_1.addLog)(bodyValue);
-        return res.status(200).send({ message: "Daily log added successfully" });
+        const bodyValue = req.body;
+        const id = bodyValue._id;
+        const bodyKeys = new Set(Object.keys(bodyValue));
+        const todaysLog = await (0, logs_1.getLogById)(id);
+        const todayLogKeys = new Set(Object.keys(todaysLog));
+        const value = (0, helpers_1.areSetsEqual)(bodyKeys, todayLogKeys);
+        if (!value)
+            return res.status(400).send({ error: "Invalid log" });
+        delete bodyValue._id;
+        await (0, logs_1.updateLog)(id, bodyValue);
+        return res.status(200).send({ message: "Daily log updated successfully" });
     }
     catch (e) {
         console.log("Error with adding daily log", e);

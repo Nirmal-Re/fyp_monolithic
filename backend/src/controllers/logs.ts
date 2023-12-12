@@ -1,15 +1,23 @@
 import {Request, Response} from "express";
-import { startAndEndOfDay } from "../helpers";
+import { startAndEndOfDay, areSetsEqual} from "../helpers";
 
-import {addLog, getHabits, updateHabits, getTodaysLog} from "../model/logs";
+import {updateLog, getHabits, updateHabits, getTodaysLog, getLogById} from "../model/logs";
 
 
 //This function isn't finished yet
 export const addDailyLog = async (req: Request, res:Response) => {
     try {
-        // const {} = req.body;
-        const value = await addLog(bodyValue);
-        return res.status(200).send({message: "Daily log added successfully"});
+        const bodyValue = req.body;
+        const id = bodyValue._id;
+        const bodyKeys = new Set(Object.keys(bodyValue));
+        const todaysLog = await getLogById(id);
+        const todayLogKeys = new Set(Object.keys(todaysLog));
+        const value = areSetsEqual(bodyKeys, todayLogKeys);
+        if (!value) return res.status(400).send({error: "Invalid log"});
+
+        delete bodyValue._id;
+        await updateLog(id, bodyValue);
+        return res.status(200).send({message: "Daily log updated successfully"});
     } catch (e) {
         console.log("Error with adding daily log", e);
         res.status(400).send({error: "Error with adding daily log"});

@@ -1,11 +1,13 @@
-import { start } from "repl";
+import {ObjectId} from "mongodb";
+
+import { startAndEndOfDay } from "../helpers";
 import { m_getOne, m_insertOne, m_deleteOne, m_updateOne } from "./mongoDB";
 
 //Log type declaration
 interface Log {
   uid: number;
   uploadDateAndTime: Date;
-  [key: string]: number | Date | boolean;
+  [key: string]: number | Date | boolean |string;
 }
 
 
@@ -33,13 +35,13 @@ export const getTodaysLog = async (uid: number, startOfDay:Date, endOfDay:Date )
   return secondResults;
 }
 
-export const updateLog = async (id: string, log: any) => {
-  return await m_updateOne("coll_logs", { id }, { $set: log });
+export const updateLog = async (_id: string, log: any) => {
+  return await m_updateOne("coll_logs", { _id: new ObjectId(_id) }, { $set: log });
 }
 
 export const getHabits = async (uid: number) => {
   const result = await m_getOne("coll_user_habits", { uid });
-  if (result) return { habits: result.habits};
+  if (result) return { habits: result.habits}
   await createHabits(uid);
   const secondResults = await m_getOne("coll_user_habits", { uid });
   return {habits: secondResults.habits};
@@ -49,11 +51,25 @@ export const createHabits = async (uid: number) => {
   return await m_insertOne("coll_user_habits", { uid, habits: [] });
 }
 
-export const updateHabits = async (data:{uid: number, newHabits:Array<String>}) => {
+export const updateHabits = async (data:{uid: number, newHabits:Array<string>}) => {
   const {uid, newHabits} = data;
-  return await m_updateOne("coll_user_habits", { uid }, { $addToSet: { habits: {$each: newHabits }} });
+  await m_updateOne("coll_user_habits", { uid }, { $addToSet: { habits: {$each: newHabits }} });
+  const [startOfDay, endOfDay] = startAndEndOfDay();
+  const todaysLog = await getTodaysLog (uid, startOfDay, endOfDay) as Log;
+  const {_id} = todaysLog;
+  for (let i = 0; i < newHabits.length; i++) {
+    if (!todaysLog?.[newHabits[i]]) {
+      todaysLog[newHabits[i]] = false;
+    }
+  }
+  delete todaysLog._id;
+  return await updateLog(String(_id), todaysLog);
 }
 
+
+export const getLogById = async (id: string) => {
+  return await m_getOne("coll_logs", { _id: new ObjectId(id) });
+}
 
 export const deleteLog = async (id: string) => {
   return await m_deleteOne("coll_logs", { id });
