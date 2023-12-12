@@ -4,7 +4,6 @@ import { startAndEndOfDay, areSetsEqual} from "../helpers";
 import {updateLog, getHabits, updateHabits, getTodaysLog, getLogById} from "../model/logs";
 
 
-//This function isn't finished yet
 export const addDailyLog = async (req: Request, res:Response) => {
     try {
         const bodyValue = req.body;
@@ -16,6 +15,7 @@ export const addDailyLog = async (req: Request, res:Response) => {
         if (!value) return res.status(400).send({error: "Invalid log"});
 
         delete bodyValue._id;
+        bodyValue.uploadDateAndTime = new Date(todaysLog.uploadDateAndTime);
         await updateLog(id, bodyValue);
         return res.status(200).send({message: "Daily log updated successfully"});
     } catch (e) {
