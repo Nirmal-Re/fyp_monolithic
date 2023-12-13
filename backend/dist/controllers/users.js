@@ -5,11 +5,11 @@ const users_1 = require("../model/users");
 const helpers_1 = require("../helpers");
 const deleteUser = async (req, res) => {
     try {
+        console.log("[Delete User API called]");
         const { uid } = req.body;
-        console.log(uid);
         if (await !(0, users_1.deleteUserByID)(uid))
             return res.status(500).send({ error: "Error deleting user" });
-        res.cookie('access_token', '', { expires: new Date(0) });
+        res.cookie("access_token", "", { expires: new Date(0) });
         res.status(200).send({ message: "User deleted successfully" });
     }
     catch (e) {
@@ -33,6 +33,7 @@ const updateUser = async (req, res) => {
 exports.updateUser = updateUser;
 const changePassword = async (req, res) => {
     try {
+        console.log("[Change Password API called]");
         const { newPassword, uid } = req.body;
         console.log(newPassword, uid);
         const hashedPassword = await (0, helpers_1.createHashedPassword)(newPassword);

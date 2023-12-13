@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchAllHabits = exports.addNewHabits = exports.getDailyLog = exports.addDailyLog = void 0;
 const helpers_1 = require("../helpers");
 const logs_1 = require("../model/logs");
-//This function isn't finished yet
 const addDailyLog = async (req, res) => {
     try {
         const bodyValue = req.body;
@@ -15,6 +14,7 @@ const addDailyLog = async (req, res) => {
         if (!value)
             return res.status(400).send({ error: "Invalid log" });
         delete bodyValue._id;
+        bodyValue.uploadDateAndTime = new Date(todaysLog.uploadDateAndTime);
         await (0, logs_1.updateLog)(id, bodyValue);
         return res.status(200).send({ message: "Daily log updated successfully" });
     }
