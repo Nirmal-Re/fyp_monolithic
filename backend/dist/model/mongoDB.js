@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.m_getAllItems = exports.m_insertMany = exports.m_deleteOne = exports.m_getOne = exports.m_updateOne = exports.m_insertOne = void 0;
+exports.m_runAggregation = exports.m_getAllItems = exports.m_insertMany = exports.m_deleteOne = exports.m_getOne = exports.m_updateOne = exports.m_insertOne = void 0;
 const mongodb_1 = require("mongodb");
 const config_1 = require("../constants/config");
 let conn;
@@ -47,4 +47,12 @@ const m_getAllItems = async (collection) => {
     return result;
 };
 exports.m_getAllItems = m_getAllItems;
+const m_runAggregation = async (collection, pipeline) => {
+    const result = await conn
+        .collection(collection)
+        .aggregate(pipeline)
+        .toArray();
+    return result;
+};
+exports.m_runAggregation = m_runAggregation;
 //# sourceMappingURL=mongoDB.js.map

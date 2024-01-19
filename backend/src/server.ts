@@ -24,8 +24,9 @@ app.get("/", (req, res) => {
 app.use("/auth", router());
 app.use("/user", router());
 app.use("/logs", router());
+app.use("/reports", router());
 
-app.listen(4000, () => {
+app.listen(3000, () => {
   console.log("Server is running on http://localhost:4000/");
 });
 

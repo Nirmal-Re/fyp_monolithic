@@ -21,7 +21,8 @@ app.get("/", (req, res) => {
 app.use("/auth", (0, router_1.default)());
 app.use("/user", (0, router_1.default)());
 app.use("/logs", (0, router_1.default)());
-app.listen(4000, () => {
+app.use("/reports", (0, router_1.default)());
+app.listen(3000, () => {
     console.log("Server is running on http://localhost:4000/");
 });
 //    "dev": "concurrently \"tsc -w\" \"nodemon dist/server.js\""
