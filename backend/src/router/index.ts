@@ -1,16 +1,16 @@
-import {Router} from 'express';
+import { Router } from "express";
 
-import authentication from './authentication';
-import users from './users';
-import logs from './logs';
-import reports from './reports';
+import authentication from "./authentication";
+import users from "./users";
+import logs from "./logs";
+import report from "./report";
 
 const router = Router();
 
 export default (): Router => {
-    authentication(router);
-    users(router);
-    logs(router);
-    reports(router);
-    return router;
-}
+  authentication(router);
+  users(router);
+  logs(router);
+  report(router);
+  return router;
+};

@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { getUserLogData } from "../controllers/reports";
+import { getUserLogData } from "../controllers/report";
 import { isAuthenticated } from "../middlewares";
 
 export default (router: Router) => {

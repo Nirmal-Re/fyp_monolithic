@@ -12,7 +12,7 @@ const addDailyLog = async (req, res) => {
         const todayLogKeys = new Set(Object.keys(todaysLog));
         const value = (0, helpers_1.areSetsEqual)(bodyKeys, todayLogKeys);
         if (!value)
-            return res.status(400).send({ error: "Invalid log" });
+            return res.status(400).send({ error: "Invalid Log" });
         delete bodyValue._id;
         bodyValue.uploadDateAndTime = new Date(todaysLog.uploadDateAndTime);
         await (0, logs_1.updateLog)(id, bodyValue);
@@ -42,11 +42,13 @@ const addNewHabits = async (req, res) => {
         const { uid, newHabits } = req.body;
         if (!newHabits)
             return res.status(400).send({ error: "No habits provided" });
-        const value = await (0, logs_1.updateHabits)({ uid, newHabits: newHabits.toUpperCase().split(",") });
+        const value = await (0, logs_1.updateHabits)({
+            uid,
+            newHabits: newHabits.toUpperCase().split(","),
+        });
         if (value === true) {
             return res.status(200).send({ message: "Habits added successfully" });
         }
-        ;
         return res.status(400).send({ error: "Error with adding habits" });
     }
     catch (e) {

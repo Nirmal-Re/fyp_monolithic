@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getHabitStats } from "../model/reports";
+import { getHabitStats } from "../model/report";
 
 export const getUserLogData = async (req: Request, res: Response) => {
   try {
