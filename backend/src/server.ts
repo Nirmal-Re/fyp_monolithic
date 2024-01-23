@@ -24,10 +24,10 @@ app.get("/", (req, res) => {
 app.use("/auth", router());
 app.use("/user", router());
 app.use("/logs", router());
-app.use("/report", router());
+app.use("/dashboard", router());
 
 app.listen(3000, () => {
-  console.log("Server is running on http://localhost:4000/");
+  console.log("Server is running on http://localhost:3000/");
 });
 
 //    "dev": "concurrently \"tsc -w\" \"nodemon dist/server.js\""

@@ -3,7 +3,7 @@ import { Router } from "express";
 import authentication from "./authentication";
 import users from "./users";
 import logs from "./logs";
-import report from "./report";
+import report from "./dashboard";
 
 const router = Router();
 
