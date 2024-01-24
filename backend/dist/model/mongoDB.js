@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.m_runAggregation = exports.m_getAllItems = exports.m_insertMany = exports.m_deleteOne = exports.m_getOne = exports.m_updateOne = exports.m_insertOne = void 0;
+exports.m_runAggregation = exports.m_deleteMany = exports.m_getAllItems = exports.m_insertMany = exports.m_deleteOne = exports.m_getOne = exports.m_updateOne = exports.m_insertOne = void 0;
 const mongodb_1 = require("mongodb");
 const config_1 = require("../constants/config");
 let conn;
@@ -22,8 +22,10 @@ const m_insertOne = async (collection, item) => {
     return result.acknowledged;
 };
 exports.m_insertOne = m_insertOne;
-const m_updateOne = async (collection, filter, update) => {
-    const result = await conn.collection(collection).updateOne(filter, update);
+const m_updateOne = async (collection, filter, update, options = {}) => {
+    const result = await conn
+        .collection(collection)
+        .updateOne(filter, update, options);
     return result.acknowledged;
 };
 exports.m_updateOne = m_updateOne;
@@ -47,6 +49,11 @@ const m_getAllItems = async (collection) => {
     return result;
 };
 exports.m_getAllItems = m_getAllItems;
+const m_deleteMany = async (collection, filter) => {
+    const result = await conn.collection(collection).deleteMany(filter);
+    return result.acknowledged;
+};
+exports.m_deleteMany = m_deleteMany;
 const m_runAggregation = async (collection, pipeline) => {
     const result = await conn
         .collection(collection)

@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import router from "./router";
+import "./cron_job/notification";
 
 const app = express();
 app.use(express.json());

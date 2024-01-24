@@ -24,7 +24,7 @@ const excuteCustomQuery = (query) => {
 };
 exports.excuteCustomQuery = excuteCustomQuery;
 const addItem = async (table, item) => {
-    const [result] = await conn.query(`INSERT INTO ${table} SET ?`, [item]);
+    const [result] = (await conn.query(`INSERT INTO ${table} SET ?`, [item]));
     const { affectedRows } = result;
     return affectedRows === 1 ? true : false;
 };
@@ -43,12 +43,15 @@ const getItemByID = (table, id) => {
 exports.getItemByID = getItemByID;
 const getItemsByCriteria = async (table, fields, criteria) => {
     const queryfields = fields.length === 0 ? "*" : fields.join(", ");
-    const [row, _] = await conn.query(`SELECT ${queryfields} FROM ${table} WHERE ?`, [criteria]);
+    const [row, _] = (await conn.query(`SELECT ${queryfields} FROM ${table} WHERE ?`, [criteria]));
     return row[0];
 };
 exports.getItemsByCriteria = getItemsByCriteria;
 const updateItem = async (table, id, item) => {
-    const [result] = await conn.query(`UPDATE ${table} SET ? WHERE id = ?`, [item, id]);
+    const [result] = (await conn.query(`UPDATE ${table} SET ? WHERE id = ?`, [
+        item,
+        id,
+    ]));
     return result.affectedRows === 1 ? true : false;
 };
 exports.updateItem = updateItem;
@@ -57,7 +60,9 @@ const updateItemsByCriteria = (table, criteria, item) => {
 };
 exports.updateItemsByCriteria = updateItemsByCriteria;
 const deleteItemByID = async (table, id) => {
-    const [result] = await conn.query(`DELETE FROM ${table} WHERE id = ?`, [id]);
+    const [result] = (await conn.query(`DELETE FROM ${table} WHERE id = ?`, [
+        id,
+    ]));
     const { affectedRows } = result;
     return affectedRows === 1 ? true : false;
 };
@@ -70,4 +75,11 @@ const deleteAllItems = (table) => {
     conn.query(`DELETE FROM ${table}`, []);
 };
 exports.deleteAllItems = deleteAllItems;
+// export const getSpecificItems = async (table: string, fields: string[]) => {
+//   const [data, field] = (await conn.query(
+//     `SELECT ${fields.join(", ")} FROM ${table}`,
+//     []
+//   )) as [RowDataPacket[], FieldPacket[]];
+//   return data;
+// };
 //# sourceMappingURL=sqlDB.js.map

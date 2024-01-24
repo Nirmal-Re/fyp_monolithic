@@ -29,9 +29,12 @@ export const m_insertOne = async (
 export const m_updateOne = async (
   collection: string,
   filter: any,
-  update: any
+  update: any,
+  options: any = {}
 ): Promise<boolean> => {
-  const result = await conn.collection(collection).updateOne(filter, update);
+  const result = await conn
+    .collection(collection)
+    .updateOne(filter, update, options);
   return result.acknowledged;
 };
 
@@ -62,6 +65,14 @@ export const m_insertMany = async (
 export const m_getAllItems = async (collection: string): Promise<any[]> => {
   const result = await conn.collection(collection).find().toArray();
   return result;
+};
+
+export const m_deleteMany = async (
+  collection: string,
+  filter: any
+): Promise<boolean> => {
+  const result = await conn.collection(collection).deleteMany(filter);
+  return result.acknowledged;
 };
 
 export const m_runAggregation = async (
