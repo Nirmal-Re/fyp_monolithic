@@ -26,6 +26,7 @@ app.use("/auth", router());
 app.use("/user", router());
 app.use("/logs", router());
 app.use("/dashboard", router());
+app.use("/notifications", router());
 
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000/");

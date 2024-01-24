@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { m_deleteMany, m_updateOne } from "./mongoDB";
+import { m_deleteMany, m_getOne, m_updateOne } from "./mongoDB";
 
 // export const addNotification = async (log: any) => {
 //   return await m_insertOne("coll_logs", log);
@@ -16,4 +16,8 @@ export const addNotification = async (notification: any) => {
     { $push: { notifications: notification.msg } },
     { upsert: true }
   );
+};
+
+export const getAllNotifications = async (uid: number) => {
+  return await m_getOne("coll_notifications", { uid: uid });
 };
