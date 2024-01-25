@@ -53,12 +53,15 @@ export const isValidWorkoutData = async (
       const currentSet = current.sets[j];
       const keys = new Set(Object.keys(currentSet));
       if (
-        areSetsEqual(keys, new Set(["time", "reps"])) ||
-        areSetsEqual(keys, new Set(["weight", "reps"]))
-      ) {
-      } else {
+        data.type === "cardio" &&
+        !areSetsEqual(keys, new Set(["time", "reps"]))
+      )
         return false;
-      }
+      if (
+        data.type !== "cardio" &&
+        !areSetsEqual(keys, new Set(["weight", "reps"]))
+      )
+        return false;
     }
   }
   return true;

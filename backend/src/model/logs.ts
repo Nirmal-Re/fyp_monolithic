@@ -99,6 +99,37 @@ export const deleteLog = async (id: string) => {
   return await m_deleteOne("coll_logs", { id });
 };
 
+export const getHabitStats = async (userId: string): Promise<any[]> => {
+  const pipeline = [
+    { $match: { uid: Number(userId) } },
+    { $sort: { uploadDateAndTime: 1 } },
+    {
+      $project: {
+        _id: 0,
+        uploadDateAndTime: 1,
+        NoOfTrue: {
+          $size: {
+            $filter: {
+              input: { $objectToArray: "$$ROOT" },
+              cond: { $eq: ["$$this.v", true] },
+            },
+          },
+        },
+        NoOfFalse: {
+          $size: {
+            $filter: {
+              input: { $objectToArray: "$$ROOT" },
+              cond: { $eq: ["$$this.v", false] },
+            },
+          },
+        },
+      },
+    },
+  ];
+  const result = await m_runAggregation("coll_logs", pipeline);
+  return result;
+};
+
 export const getTodaysUids = async () => {
   const [startOfDay, endOfDay] = startAndEndOfDay();
   const pipeline = [
