@@ -6,17 +6,17 @@ import {
 } from "../model/notification";
 
 interface Notification {
-  uid: string;
+  uid: Number;
   msg: string;
 }
 
-// Run once a day at 23:59
+// Run once a day at 23:55
 cron.schedule("55 23 * * *", async () => {
   deletePastNotifications();
 });
 
 //TODO change it to every hour
-cron.schedule("59 * * * * *", async () => {
+cron.schedule("* * * * *", async () => {
   console.log("Generating notifications...");
   // Get all users
   const users = await getTodaysUids();

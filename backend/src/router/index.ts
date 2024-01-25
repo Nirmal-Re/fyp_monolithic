@@ -5,6 +5,7 @@ import users from "./users";
 import logs from "./logs";
 import dashboard from "./dashboard";
 import notification from "./notification";
+import exercise from "./exercise";
 
 const router = Router();
 
@@ -14,5 +15,6 @@ export default (): Router => {
   logs(router);
   dashboard(router);
   notification(router);
+  exercise(router);
   return router;
 };

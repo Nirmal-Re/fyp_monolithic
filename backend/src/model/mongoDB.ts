@@ -85,3 +85,15 @@ export const m_runAggregation = async (
     .toArray();
   return result;
 };
+
+export const m_getOneOrUpdate = async (
+  collection: string,
+  filter: any,
+  update: any,
+  options: any = { upsert: true, returnDocument: "after" }
+): Promise<any> => {
+  const result = await conn
+    .collection(collection)
+    .findOneAndUpdate(filter, update, options);
+  return result;
+};

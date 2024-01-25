@@ -11,3 +11,5 @@ export const getUserLogData = async (req: Request, res: Response) => {
     res.status(400).send({ error: "Error with adding daily log" });
   }
 };
+
+export const getWorkoutHistoricData = async (req: Request, res: Response) => {};
