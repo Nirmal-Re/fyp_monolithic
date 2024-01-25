@@ -1,5 +1,5 @@
-import { m_getOneOrUpdate } from "./mongoDB";
-import { updateWorkoutAll } from "../customTypes/exercise";
+import { m_getOneOrUpdate, m_insertOne, m_getOne } from "./mongoDB";
+import { updateWorkoutAll, wholeWorkoutData } from "../customTypes/exercise";
 
 export const getWorkoutTypes = async (uid: number) => {
   return await m_getOneOrUpdate(
@@ -44,4 +44,18 @@ export const updateWorkoutTypes = async (
     );
   }
   return result;
+};
+
+export const updateWorkoutData = async (
+  uid: number,
+  data: wholeWorkoutData
+) => {
+  const entry = { uid, uploadDateAndTime: new Date(), ...data };
+  return await m_insertOne("coll_workout_data", entry);
+};
+
+export const getExercises = async (uid: number, type: string) => {
+  return (
+    await m_getOne("coll_user_workout_types", { uid }, { [type]: 1, _id: 0 })
+  )[type];
 };

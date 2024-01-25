@@ -40,9 +40,12 @@ export const m_updateOne = async (
 
 export const m_getOne = async (
   collection: string,
-  filter: any
+  filter: any,
+  fields: any = {}
 ): Promise<any> => {
-  const result = await conn.collection(collection).findOne(filter);
+  const result = await conn
+    .collection(collection)
+    .findOne(filter, { projection: fields });
   return result;
 };
 

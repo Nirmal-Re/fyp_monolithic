@@ -10,14 +10,24 @@ interface updateWorkoutEach {
 
 export interface updateWorkoutAll extends Array<updateWorkoutEach> {}
 
-interface set {
-  [(key in "time") | "weight"]: Number;
-  reps: Number;
+interface timeSet {
+  time: number;
+  reps: number;
 }
+
+interface weightSet {
+  weight: number;
+  reps: number;
+}
+
+type set = timeSet | weightSet;
 
 interface exercise {
   name: exerciseName;
   sets: set[];
 }
 
-export interface wholeWorkoutData extends Array<exercise> {}
+export interface wholeWorkoutData {
+  type: "push" | "pull" | "legs" | "cardio";
+  data: exercise[];
+}
