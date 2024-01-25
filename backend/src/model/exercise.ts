@@ -59,3 +59,39 @@ export const getExercises = async (uid: number, type: string) => {
     await m_getOne("coll_user_workout_types", { uid }, { [type]: 1, _id: 0 })
   )[type];
 };
+
+export const getHistoryWorkoutData = async (
+  uid: number,
+  start: Date,
+  end: Date
+) => {
+  const pipeline = [
+    { $match: { uid, uploadDateAndTime: { $gte: start, $lte: end } } },
+    { $group: { type: "$type" } },
+  ];
+};
+
+//This might be useful
+// [
+//   { $match: { uid:20} },
+//   { $unwind: "$data" },
+//   {
+//     $group: {
+//       _id: "$type",
+//       uploadDateAndTime: { $push: "$uploadDateAndTime" },
+//       exercises: {
+//         $addToSet: {
+//           sets: "$data.sets",
+//         },
+//       },
+//     },
+//   },
+//   {
+//     $project: {
+//       _id: 0,
+//       type: "$_id",
+//       uploadDateAndTime: 1,
+//       exercises: 1,
+//     },
+//   },
+// ]
