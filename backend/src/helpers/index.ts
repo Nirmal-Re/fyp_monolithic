@@ -37,6 +37,21 @@ export const areSetsEqual = (setA: Set<any>, setB: Set<any>): boolean => {
   return true;
 };
 
+export const convertDates = (start: string, end: string): Date[] => {
+  try {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    return [startDate, endDate];
+  } catch {
+    throw new Error("Error with dates");
+  }
+};
+
+export const validDates = (start: Date, end: Date): boolean => {
+  if (start > end) return false;
+  return true;
+};
+
 export const isValidWorkoutData = async (
   uid: number,
   data: any

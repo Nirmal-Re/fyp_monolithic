@@ -1,5 +1,14 @@
-import { m_getOneOrUpdate, m_insertOne, m_getOne } from "./mongoDB";
-import { updateWorkoutAll, wholeWorkoutData } from "../customTypes/exercise";
+import {
+  m_getOneOrUpdate,
+  m_insertOne,
+  m_getOne,
+  m_getAllItems,
+} from "./mongoDB";
+import {
+  updateWorkoutAll,
+  wholeWorkoutData,
+  WorkoutType,
+} from "../customTypes/exercise";
 
 export const getWorkoutTypes = async (uid: number) => {
   return await m_getOneOrUpdate(
@@ -60,38 +69,44 @@ export const getExercises = async (uid: number, type: string) => {
   )[type];
 };
 
+const calculateAverage = (data: any): number => {
+  const exerciseAverages: number[] = [];
+  let totalNoOfReps: number = 0;
+  for (let i = 0; i < data.length; i++) {
+    const all = data[i].sets.map((set: any) => {
+      totalNoOfReps += set.reps;
+      if (set?.weight) return set.weight * set.reps;
+      return set.time * set.reps;
+    });
+    const total = all.reduce((a: number, b: number) => a + b, 0);
+    const average = total / all.length;
+    console.log("Averages: ", average);
+    exerciseAverages.push(average);
+  }
+  const total = exerciseAverages.reduce((a: number, b: number) => a + b, 0);
+  const averageWeightEachSet = total / exerciseAverages.length;
+  const averageWeightEachRep = averageWeightEachSet / totalNoOfReps;
+  return averageWeightEachRep;
+};
+
 export const getHistoryWorkoutData = async (
   uid: number,
   start: Date,
   end: Date
 ) => {
-  const pipeline = [
-    { $match: { uid, uploadDateAndTime: { $gte: start, $lte: end } } },
-    { $group: { type: "$type" } },
-  ];
+  const types = ["push", "pull", "legs", "cardio"];
+  const results: Record<string, WorkoutType> = {};
+  for (const t of types) {
+    const documents = await m_getAllItems(
+      "coll_workout_data",
+      { uid, type: t, uploadDateAndTime: { $gte: start, $lte: end } },
+      { _id: 0, type: 1, uploadDateAndTime: 1, data: 1 }
+    );
+    results[t] = {
+      uploadDateAndTime: documents.map((doc) => doc.uploadDateAndTime),
+      averageForEachDay: documents.map((doc) => calculateAverage(doc.data)),
+    };
+  }
+  console.log(results);
+  return results;
 };
-
-//This might be useful
-// [
-//   { $match: { uid:20} },
-//   { $unwind: "$data" },
-//   {
-//     $group: {
-//       _id: "$type",
-//       uploadDateAndTime: { $push: "$uploadDateAndTime" },
-//       exercises: {
-//         $addToSet: {
-//           sets: "$data.sets",
-//         },
-//       },
-//     },
-//   },
-//   {
-//     $project: {
-//       _id: 0,
-//       type: "$_id",
-//       uploadDateAndTime: 1,
-//       exercises: 1,
-//     },
-//   },
-// ]

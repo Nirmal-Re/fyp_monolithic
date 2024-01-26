@@ -65,8 +65,15 @@ export const m_insertMany = async (
   return result.acknowledged;
 };
 
-export const m_getAllItems = async (collection: string): Promise<any[]> => {
-  const result = await conn.collection(collection).find().toArray();
+export const m_getAllItems = async (
+  collection: string,
+  filter: any,
+  fields: any = {}
+): Promise<any[]> => {
+  const result = await conn
+    .collection(collection)
+    .find(filter, { projection: fields })
+    .toArray();
   return result;
 };
 

@@ -31,3 +31,8 @@ export interface wholeWorkoutData {
   type: "push" | "pull" | "legs" | "cardio";
   data: exercise[];
 }
+
+interface WorkoutType {
+  uploadDateAndTime: Date[];
+  averageForEachDay: number[];
+}
