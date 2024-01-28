@@ -164,7 +164,7 @@ export const getHabitStats = async (userId: string, start: Date, end: Date) => {
     },
   ];
   const result = await m_runAggregation("coll_logs", pipeline);
-  return result;
+  return result[0] || {};
 };
 
 export const getTodaysUids = async () => {
