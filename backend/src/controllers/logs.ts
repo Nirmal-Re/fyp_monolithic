@@ -17,7 +17,8 @@ export const addDailyLog = async (req: Request, res: Response) => {
     const todaysLog = await getLogById(id);
     const todayLogKeys = new Set(Object.keys(todaysLog));
     const value = areSetsEqual(bodyKeys, todayLogKeys);
-    if (!value) return res.status(400).send({ error: "Invalid Log" });
+    if (!value || bodyValue.moods.length !== todaysLog.moods.length)
+      return res.status(400).send({ error: "Invalid Log" });
 
     delete bodyValue._id;
     bodyValue.uploadDateAndTime = new Date(todaysLog.uploadDateAndTime);
