@@ -30,7 +30,7 @@ export const getWorkoutHistoricData = async (req: Request, res: Response) => {
       return res.status(400).send({ error: "Invalid dates" });
     }
     const data = await getHistoryWorkoutData(uid, startDate, endDate);
-    return res.status(200).send({ data });
+    return res.status(200).send(data);
   } catch (e: unknown) {
     console.error(e);
     if (e instanceof Error) res.status(400).send({ error: e.message });
