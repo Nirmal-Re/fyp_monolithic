@@ -45,6 +45,7 @@ export const getDailyLog = async (req: Request, res: Response) => {
 export const addNewHabits = async (req: Request, res: Response) => {
   try {
     const { uid, newHabits } = req.body;
+    // console.log(req.body);
     if (!newHabits)
       return res.status(400).send({ error: "No habits provided" });
     const value = await updateHabits({

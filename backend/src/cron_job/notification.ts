@@ -16,7 +16,7 @@ cron.schedule("55 23 * * *", async () => {
 });
 
 //TODO change it to every hour
-cron.schedule("* * * * *", async () => {
+cron.schedule("0 * * * *", async () => {
   console.log("Generating notifications...");
   // Get all users
   const users = await getTodaysUids();
