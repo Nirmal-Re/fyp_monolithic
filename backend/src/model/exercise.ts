@@ -86,7 +86,7 @@ const calculateAverage = (data: any): number => {
   const total = exerciseAverages.reduce((a: number, b: number) => a + b, 0);
   const averageWeightEachSet = total / exerciseAverages.length;
   const averageWeightEachRep = averageWeightEachSet / totalNoOfReps;
-  return averageWeightEachRep;
+  return averageWeightEachRep || 0;
 };
 
 export const getHistoryWorkoutData = async (

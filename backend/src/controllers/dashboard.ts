@@ -7,6 +7,7 @@ import { getHistoryWorkoutData } from "../model/exercise";
 export const getUserLogData = async (req: Request, res: Response) => {
   try {
     const { uid, start, end } = req.body;
+    console.log("Getting log data for: ", uid, start, end);
     const [startDate, endDate] = convertDates(start, end);
     if (!validDates(startDate, endDate)) {
       console.log(startDate, endDate);
