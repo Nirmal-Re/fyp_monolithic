@@ -15,16 +15,15 @@ cron.schedule("55 23 * * *", async () => {
   deletePastNotifications();
 });
 
-//TODO change it to every hour
 cron.schedule("0 * * * *", async () => {
   console.log("Generating notifications...");
-  // Get all users
+  const currentHour = new Date().getHours().toString().padEnd(5, ":000");
   const users = await getTodaysUids();
   // Generate a notification for each user
   for (const user of users) {
     const notification: Notification = {
       uid: user,
-      msg: "This is your hourly notification",
+      msg: `Please log your mood for ${currentHour}!`,
     };
     addNotification(notification);
   }

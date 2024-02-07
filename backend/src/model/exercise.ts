@@ -100,7 +100,8 @@ export const getHistoryWorkoutData = async (
     const documents = await m_getAllItems(
       "coll_workout_data",
       { uid, type: t, uploadDateAndTime: { $gte: start, $lte: end } },
-      { _id: 0, type: 1, uploadDateAndTime: 1, data: 1 }
+      { _id: 0, type: 1, uploadDateAndTime: 1, data: 1 },
+      { uploadDateAndTime: 1 }
     );
     results[t] = {
       uploadDateAndTime: documents.map((doc) => doc.uploadDateAndTime),
