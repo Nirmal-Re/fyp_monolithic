@@ -14,6 +14,7 @@ export const register = async (req: Request, res: Response) => {
   try {
     console.log("[Register API called]");
     const { email, password, firstName, lastName } = req.body;
+    console.log(req.body);
     if (!email || !password || !firstName || !lastName) {
       return res.status(400).send({ error: "Missing fields" });
     }
