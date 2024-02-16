@@ -103,6 +103,11 @@ export const getHistoryWorkoutData = async (
       { _id: 0, type: 1, uploadDateAndTime: 1, data: 1 },
       { uploadDateAndTime: 1 }
     );
+    console.log(
+      { uid, type: t, uploadDateAndTime: { $gte: start, $lte: end } },
+      { _id: 0, type: 1, uploadDateAndTime: 1, data: 1 },
+      { uploadDateAndTime: 1 }
+    );
     results[t] = {
       uploadDateAndTime: documents.map((doc) => doc.uploadDateAndTime),
       averageForEachDay: documents.map((doc) => calculateAverage(doc.data)),
