@@ -1,10 +1,5 @@
 import { Request, Response } from "express";
-import {
-  startAndEndOfDay,
-  areSetsEqual,
-  convertDates,
-  validDates,
-} from "../helpers";
+import { startAndEndOfDay, areSetsEqual } from "../helpers";
 
 import {
   updateLog,
@@ -12,7 +7,7 @@ import {
   updateHabits,
   getTodaysLog,
   getLogById,
-  getDataBetweenDates,
+  getLogIDs,
 } from "../model/logs";
 import { log } from "console";
 
@@ -81,16 +76,10 @@ export const fetchAllHabits = async (req: Request, res: Response) => {
 };
 
 //New Stuff
-export const getAskedLogIDs = async (req: Request, res: Response) => {
+export const getLogIDsController = async (req: Request, res: Response) => {
   try {
-    const { uid, start, end } = req.body;
-    const [startDate, endDate] = convertDates(start, end);
-    if (!validDates(startDate, endDate)) {
-      console.log(startDate, endDate);
-      return res.status(400).send({ error: "Invalid dates" });
-    }
-
-    const value = await getDataBetweenDates(uid, startDate, endDate);
+    const uid = req.body.uid;
+    const value = await getLogIDs(uid);
     return res.status(200).json(value);
   } catch (e) {
     console.log("Error with getting asked logs", e);

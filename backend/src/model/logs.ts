@@ -187,16 +187,11 @@ export const getTodaysUids = async () => {
 };
 
 //new stuff
-export const getDataBetweenDates = async (
-  userId: string,
-  start: Date,
-  end: Date
-) => {
+export const getLogIDs = async (userId: string) => {
   const pipeline = [
     {
       $match: {
         uid: Number(userId),
-        uploadDateAndTime: { $gte: start, $lte: end },
       },
     },
     { $sort: { uploadDateAndTime: 1 } },

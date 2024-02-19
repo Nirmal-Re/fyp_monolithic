@@ -1,8 +1,11 @@
+import { ObjectId } from "mongodb";
+
 import {
   m_getOneOrUpdate,
   m_insertOne,
   m_getOne,
   m_getAllItems,
+  m_runAggregation,
 } from "./mongoDB";
 import {
   updateWorkoutAll,
@@ -115,4 +118,32 @@ export const getHistoryWorkoutData = async (
   }
   console.log(results);
   return results;
+};
+
+export const getWorkoutIDs = async (userId: string, type: string) => {
+  const pipeline = [
+    {
+      $match: {
+        uid: Number(userId),
+        type: type,
+      },
+    },
+    { $sort: { uploadDateAndTime: 1 } },
+    {
+      $project: {
+        _id: 0,
+        id: "$_id",
+        uploadDateAndTime: 1,
+      },
+    },
+  ];
+
+  console.log(pipeline);
+  const result = await m_runAggregation("coll_workout_data", pipeline);
+  console.log(result);
+  return result;
+};
+
+export const getWorkoutByID = async (id: string) => {
+  return await m_getOne("coll_workout_data", { _id: new ObjectId(id) });
 };

@@ -5,6 +5,8 @@ import {
   getWorkoutTypes,
   updateWorkoutTypes,
   updateWorkoutData,
+  getWorkoutIDs,
+  getWorkoutByID,
 } from "../model/exercise";
 import { updateWorkoutAll, wholeWorkoutData } from "../customTypes/exercise";
 
@@ -52,5 +54,30 @@ export const addWorkoutData = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//new thing
+export const getWorkoutIDsController = async (req: Request, res: Response) => {
+  try {
+    const { uid } = req.body;
+    const type = req.params.type;
+    console.log(uid, type);
+    const value = await getWorkoutIDs(uid, type);
+    return res.status(200).json(value);
+  } catch (e) {
+    console.log("Error with getting asked logs", e);
+    res.status(400).send({ error: "Error with getting asked logs" });
+  }
+};
+
+export const getWorkoutByIDController = async (req: Request, res: Response) => {
+  try {
+    const workoutID = req.params.id;
+    const value = await getWorkoutByID(workoutID);
+    return res.status(200).json(value);
+  } catch (e) {
+    console.log("Error with getting log by id", e);
+    res.status(400).send({ error: "Error with getting log by id" });
   }
 };
