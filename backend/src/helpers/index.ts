@@ -62,7 +62,7 @@ export const isValidWorkoutData = async (
   const exercises = await getExercises(uid, data.type);
   for (let i = 0; i < data.data.length; i++) {
     const current = data.data[i];
-    current.name = current.name.trim().toUpperCase().replace(/\s/g, "");
+    current.name = current.name.trim().toLowerCase();
     if (!exercises.includes(current.name)) return false;
     for (let j = 0; j < current.sets.length; j++) {
       const currentSet = current.sets[j];

@@ -7,6 +7,7 @@ import {
   updateWorkoutData,
   getWorkoutIDs,
   getWorkoutByID,
+  updateWorkoutLog,
 } from "../model/exercise";
 import { updateWorkoutAll, wholeWorkoutData } from "../customTypes/exercise";
 
@@ -43,14 +44,21 @@ export const addWorkoutData = async (req: Request, res: Response) => {
   try {
     const { uid } = req.body;
     console.log(`ADD-WORKOUT API CALLED BY USER ${uid}`);
-    const toUpdate = req.body.update as wholeWorkoutData;
+    const toUpdate = req.body.update;
 
     //Vaidate the data and also changes the exercise names to uppercase
     if (!(await isValidWorkoutData(uid, toUpdate)))
       return res.status(400).json({ error: "Invalid workout data" });
-    console.log(toUpdate);
-    const d = await updateWorkoutData(uid, toUpdate);
-    res.status(200).json({ d });
+
+    if (toUpdate?._id) {
+      const id = toUpdate._id;
+      delete toUpdate._id;
+      const upd = await updateWorkoutLog(toUpdate._id, toUpdate);
+      return res.status(200).json({ update: upd });
+    }
+
+    const upd = await updateWorkoutData(uid, toUpdate);
+    res.status(200).json({ update: true });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
