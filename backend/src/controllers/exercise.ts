@@ -62,7 +62,7 @@ export const getWorkoutIDsController = async (req: Request, res: Response) => {
   try {
     const { uid } = req.body;
     const type = req.params.type;
-    console.log(uid, type);
+    if (!type) return res.status(400).send({ error: "No type provided" });
     const value = await getWorkoutIDs(uid, type);
     return res.status(200).json(value);
   } catch (e) {
@@ -74,6 +74,8 @@ export const getWorkoutIDsController = async (req: Request, res: Response) => {
 export const getWorkoutByIDController = async (req: Request, res: Response) => {
   try {
     const workoutID = req.params.id;
+    if (!workoutID)
+      return res.status(400).send({ error: "No workout id provided" });
     const value = await getWorkoutByID(workoutID);
     return res.status(200).json(value);
   } catch (e) {

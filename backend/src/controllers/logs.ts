@@ -90,6 +90,7 @@ export const getLogIDsController = async (req: Request, res: Response) => {
 export const getLogByIdController = async (req: Request, res: Response) => {
   try {
     const logID = req.params.id;
+    if (!logID) return res.status(400).send({ error: "No log id provided" });
     const value = await getLogById(logID);
     return res.status(200).json(value);
   } catch (e) {

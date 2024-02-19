@@ -138,9 +138,7 @@ export const getWorkoutIDs = async (userId: string, type: string) => {
     },
   ];
 
-  console.log(pipeline);
   const result = await m_runAggregation("coll_workout_data", pipeline);
-  console.log(result);
   return result;
 };
 
