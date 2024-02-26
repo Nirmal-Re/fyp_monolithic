@@ -53,12 +53,13 @@ export const addWorkoutData = async (req: Request, res: Response) => {
     if (toUpdate?._id) {
       const id = toUpdate._id;
       delete toUpdate._id;
-      const upd = await updateWorkoutLog(toUpdate._id, toUpdate);
+      toUpdate.uploadDateAndTime = new Date(toUpdate.uploadDateAndTime);
+      const upd = await updateWorkoutLog(id, toUpdate);
       return res.status(200).json({ update: upd });
     }
 
     const upd = await updateWorkoutData(uid, toUpdate);
-    res.status(200).json({ update: true });
+    res.status(200).json({ update: upd });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
