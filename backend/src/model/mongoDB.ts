@@ -8,8 +8,8 @@ export const mongoDbConnect = async () => {
   try {
     const client = new MongoClient(DB_mongo.host);
     await client.connect();
-    console.log("Connected successfully to mongoDB server");
     conn = await client.db(DB_mongo.database);
+    console.log("Connected successfully to mongoDB server");
     conn
       .collection("coll_logs")
       .createIndex({ uid: 1, uploadDateAndTime: 1 }, { unique: true });

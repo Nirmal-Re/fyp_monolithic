@@ -11,7 +11,13 @@ let conn: mysql2.Connection;
 //connecting to mysql database
 const sqlDbConnect = async () => {
   try {
-    conn = await mysql2.createConnection({ ...DB_mysql });
+    conn = await mysql2.createConnection({
+      ...DB_mysql,
+      ssl: {
+        // This is necessary for Azure SQL Database
+        rejectUnauthorized: true,
+      },
+    });
     console.log("Connected as id " + conn.threadId);
   } catch (e: any) {
     console.log("Error with connection", e.stack);
