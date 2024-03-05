@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rimraf dist && tsc",
-    "start": "node dist/server.js",
+    "start": "pm2 start dist/server.js",
     "predev": "npm run build",
     "dev": "concurrently \"tsc -w\" \"nodemon dist/server.js\""
   },
