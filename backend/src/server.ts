@@ -19,8 +19,8 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/auth", router());
-app.use("/user", router());
+app.use("/users/auth", router());
+app.use("/users/user", router());
 app.use("/logs", router());
 app.use("/dashboard", router());
 app.use("/notifications", router());
