@@ -10,21 +10,17 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "http://localhost:4000",
+    origin: true, // Allow all origins
     credentials: true,
+    
   })
 );
 
 app.use(express.json());
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
-  console.log("Hello World!");
-  res.send("Hello World!");
-});
-
-app.use("/auth", router());
-app.use("/user", router());
+app.use("/users/auth", router());
+app.use("/users/user", router());
 app.use("/logs", router());
 app.use("/dashboard", router());
 app.use("/notifications", router());

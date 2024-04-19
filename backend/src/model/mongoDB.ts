@@ -52,7 +52,6 @@ export const m_updateOne = async (
   const result = await conn
     .collection(collection)
     .updateOne(filter, update, options);
-  console.log(filter);
   return result.acknowledged;
 };
 

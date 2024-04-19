@@ -4,6 +4,7 @@ import { get, merge } from "lodash";
 
 import { secrets } from "../constants/config";
 import { fromPairs } from "lodash";
+import { access } from "fs";
 
 export const isAuthenticated = async (
   req: express.Request,
@@ -12,7 +13,9 @@ export const isAuthenticated = async (
 ) => {
   try {
     // get access_token from cookie
+    console.log(res);
     const { access_token } = req.cookies;
+    console.log(access_token)
     if (!access_token)
       return res.status(403).send({ error: "Not authenticated" });
 

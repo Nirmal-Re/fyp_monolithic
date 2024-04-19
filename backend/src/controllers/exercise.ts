@@ -16,7 +16,6 @@ export const updateWorkout = async (req: Request, res: Response) => {
     const { uid } = req.body;
     console.log(`ADD-WORKOUT API CALLED BY USER ${uid}`);
     const toUpdate: updateWorkoutAll = req.body.update;
-    console.log(toUpdate);
     const { push, pull, legs, cardio } = await updateWorkoutTypes(
       uid,
       toUpdate
