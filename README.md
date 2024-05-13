@@ -19,4 +19,17 @@ In order to run the backend, following commands need to be sequentially ran in t
 3. `npm run build`
 4. `npm run start`
 
+NOTE: A .env file is necessary at the backend directory. It should contain following values
+`SQL_DB_NAME=`
+`SQL_DB_USER=`
+`SQL_DB_PASSWORD=`
+`SQL_DB_HOST=localhost`
+`SQL_DB_PORT=`
 
+`MONGO_DB_NAME=`
+`MONGO_DB_USER=`
+`MONGO_DB_PASSWORD=`
+`MONGO_DB_HOST=mongodb://localhost:27017`
+
+`JWT_ACCESS_TOKEN_SECRET=e5f3f839b5ccd373f51f28d0c69e5f60726c4d79b7626bc401e6e6209768f83a7c3634e64329966eb6774596c91250dce24af68fe4d5f5912aecc`
+`JWT_REFRESH_TOKEN_SECRET=7af4989628b9c23bdeb292ebe298e87dd55e2aaa79cbc6f8e1635924914702276d26ba7833e63f8e72b105e7cf3c7940fd6eeac470`
