@@ -20,6 +20,15 @@ const sqlDbConnect = async () => {
     });
     console.log("Connected as id " + conn.threadId);
   } catch (e: any) {
+    console.log("Error with connection");
+    conn = await mysql2.createConnection({
+      ...DB_mysql,
+      ssl: {
+        // This is necessary for Azure SQL Database
+        rejectUnauthorized: false,
+      },
+    });
+    console.log("Connected as id " + conn.threadId);
     console.log("Error with connection", e.stack);
   }
 };
