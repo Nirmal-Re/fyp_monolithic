@@ -6,6 +6,8 @@ This repository contains code for my monolithic backend, developed for my Final 
 
 In order to run the backend, following commands need to be sequentially ran in the CLI (Command Line Interface). Note that NodeJs needs to be installed for these some of these commands to work.
 
+Create a table called `t_login_user_data` in the MySQL database using the dump file in `\sql_dump`. Make sure to provide the necessary credentials in the `.env` file.
+
 1. `cd backend`
 2. `npm i`
 3. `npm run dev`
